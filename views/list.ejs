@@ -1,0 +1,29 @@
+<%- include('header') -%>
+
+      <div class="rounded-3xl bg-white py-6 shadow background-box">
+        <h1 class="text-3xl font-bold text-gray-800 px-8 text-center"><%= title %></h1>
+        <p class="text-sm text-gray-400 px-8 text-center">on <%= day %></p>
+        <ul class="pt-6">
+          <% listItems.map(listItem => { %>
+            <li class="flex items-center justify-between px-8 border-t">
+              <form action="/update" method="post" class="py-4 flex items-center">
+                <input name="unchecked" value="<%=listItem._id%>" type='hidden' id="<%=listItem._id%>-hidden"></input>
+                <input name="list" value="<%=title%>" type='hidden'></input>
+                <input name="checked" value="<%=listItem._id%>" type="checkbox" id="<%=listItem._id%>" onClick="this.form.submit()" <%= listItem.checked ? 'checked' : ''%> class="w-5 h-5 shadow rounded border-transparent mr-3"></input>
+                <label for="<%=listItem._id%>" class="text-gray-800 strikethrough">
+                  <%= (listItem.name.length > 35) ? listItem.name.substr(0, 35) + '...' : listItem.name %>
+                </label>
+              </form>
+              <form action="/delete" method="post">
+                <input name="list" value="<%=title%>" type='hidden'></input>
+                <button type="submit" name="deleted" value="<%=listItem._id%>"><i class="fa-regular fa-trash-can ml-3 text-gray-400"></i></button>
+              </form>
+            </li>
+          <% }) %>
+          <form action="/" method="post" class="pt-6 px-8 border-t w-full flex justify-between">
+            <input type="text" name="newItem" placeholder="Add a new item..." autocomplete="off" class="appearance-none rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline w-10/12"></input>
+            <button type="submit" name="list" value="<%= title %>" class="w-10 h-10 py-2 px-3 bg-red-500 rounded-full text-white shadow">+</button>
+          </form>
+        </ul>
+      </div>
+<%- include('footer') -%>

@@ -1,0 +1,13 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+[type=checkbox]:checked + label.strikethrough {
+  text-decoration:line-through;
+}
+
+.background-box {
+  width: 400px;
+}
