@@ -6,4 +6,5 @@ module.exports = {
   },
   variants: {},
   plugins: [],
+  important: true,
 }
