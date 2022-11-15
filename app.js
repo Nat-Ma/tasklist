@@ -64,7 +64,13 @@ async function main() {
   app.get('/:category', async(req, res) => {
     const urlInput = _.capitalize(req.params.category);
     const foundList = await List.findOne({name: urlInput});
-    res.render('list', {title: foundList.name, day: date, listItems: foundList.listItems});
+    if (foundList) {
+      res.render('list', {title: foundList.name, day: date, listItems: foundList.listItems});
+    } else {
+      const newList = new List({name: urlInput, listItems: []})
+      await newList.save();
+      res.render('list', {title: newList.name, day: date, listItems: newList.listItems})
+    }
   })
 
   app.post('/update', async (req, res) => {
