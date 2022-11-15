@@ -29,22 +29,20 @@ async function main() {
 
   const listSchema = new mongoose.Schema({
     name: String,
-    listItems: [itemSchema]
+    listItems: [itemSchema],
   })
 
   const Item = mongoose.model('Item', itemSchema);
   const List = mongoose.model('List', listSchema);
 
-  // const defaultItems = [new Item({name: 'test'}), new Item({name: 'test2'})]
-
   app.get('/home', (req, res) => {
     res.redirect('/');
-  })
+  });
 
   app.route('/')
     .get(async(req, res) => {
       const foundItems = await Item.find();
-      res.render('list', {title: 'Home', day: date, listItems: foundItems})
+      res.render('list', {title: 'Home', day: date, listItems: foundItems});
     })
     .post(async(req, res) => {
       const listTitle = _.capitalize(req.body.list);
@@ -58,8 +56,8 @@ async function main() {
           { $addToSet: {listItems: [item]}}
         );
         res.redirect(`/${listTitle}`);
-      }
-    })
+      };
+    });
 
   app.get('/:category', async(req, res) => {
     const urlInput = _.capitalize(req.params.category);
@@ -70,8 +68,8 @@ async function main() {
       const newList = new List({name: urlInput, listItems: []})
       await newList.save();
       res.render('list', {title: newList.name, day: date, listItems: newList.listItems})
-    }
-  })
+    };
+  });
 
   app.post('/update', async (req, res) => {
     const listTitle = _.capitalize(req.body.list);
@@ -86,8 +84,8 @@ async function main() {
         { $set: { 'listItems.$.checked': checkedValue }}
       );
       res.redirect(`/${listTitle}`);
-    }
-  })
+    };
+  });
 
   app.post('/delete', async (req, res) => {
     const listTitle = _.capitalize(req.body.list);
@@ -100,14 +98,14 @@ async function main() {
         {$pull: {listItems: {'_id': req.body.deleted}}}
       );
       res.redirect(`${listTitle}`);
-    }
-  })
+    };
+  });
 
   app.get('/about', (req, res) => {
     res.render('about');
-  })
+  });
 
-  app.listen(3000, () => {
+  app.listen(process.evn.PORT || 3000, () => {
     console.log('Server running on port 3000')
   });
-}
+};
